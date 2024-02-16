@@ -1,2 +1,4 @@
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
+<h1>Welcome to Observation Deck 🔭</h1>
+<p>Observation Deck is a platform for viewing log activity locally.</p>
+<p>This is still very much a work-in-progress and there's nothing to see here yet. Please check back later to see our progress!</p>
+<p>Thank you for stopping by!</p>

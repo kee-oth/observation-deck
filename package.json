@@ -1,7 +1,13 @@
 {
-	"name": "observation-deck",
+	"name": "@keeoth/observation-deck",
 	"version": "0.0.1",
-	"private": true,
+	"private": false,
+	"bin": {
+		"observation-deck": "./build"
+	},
+	"files": [
+		"build"
+	],
 	"scripts": {
 		"dev": "vite dev",
 		"build": "vite build",
