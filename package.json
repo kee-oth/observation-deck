@@ -11,10 +11,11 @@
 	"scripts": {
 		"dev": "vite dev",
 		"build": "vite build",
+		"release": "npm run test && npm run build && npm publish && git push --follow-tags",
 		"preview": "vite preview",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
-		"test": "vitest",
+		"test": "vitest --watch=false",
 		"lint": "prettier --check . && eslint .",
 		"format": "prettier --write ."
 	},
