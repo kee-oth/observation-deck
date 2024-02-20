@@ -6,10 +6,11 @@ const config = {
 	preprocess: vitePreprocess(),
 
 	kit: {
-		adapter: adapter(),
-		alias: {
-			"$observationsFile": "src/observations-log.txt"
-		}
+		adapter: adapter({
+			out: 'build/app',
+			precompress: false,
+			envPrefix: ''
+		}),
 	}
 };
 

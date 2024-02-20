@@ -1,6 +1,6 @@
 import type { Observation } from '@keeoth/observatory';
 import { json } from '@sveltejs/kit';
-import * as tail from 'tail';
+import { Tail } from 'tail';
 import { appendFile } from 'fs/promises';
 
 /** @type {import('./$types').RequestHandler} */
@@ -32,7 +32,7 @@ export async function POST({ request }) {
 
 const createFileStream = async () => {
 	const aboutController = new AbortController();
-	const file = await new tail.Tail('./observations-log.txt');
+	const file = await new Tail('./observations-log.txt');
 
 	const cleanUp = () => {
 		aboutController.abort();
