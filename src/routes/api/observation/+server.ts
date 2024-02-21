@@ -1,7 +1,7 @@
 import type { Observation } from '@keeoth/observatory';
 import { json } from '@sveltejs/kit';
 import { Tail } from 'tail';
-import { appendFile } from 'fs/promises';
+import { appendFile, writeFile } from 'fs/promises';
 
 /** @type {import('./$types').RequestHandler} */
 export async function POST({ request }) {
@@ -32,6 +32,10 @@ export async function POST({ request }) {
 
 const createFileStream = async () => {
 	const aboutController = new AbortController();
+	// if no Observations Log file, create one
+	await writeFile('./observations-log.txt', '', {
+		flag: 'a' // create the file if it does not exist
+	});
 	const file = await new Tail('./observations-log.txt');
 
 	const cleanUp = () => {
@@ -45,14 +49,17 @@ const createFileStream = async () => {
 				file.on('line', (newLine: string) => {
 					try {
 						if (newLine) {
-							controller.enqueue(newLine);
+							// enqueing with a delimiter because multiple
+							// events can be sent in one read and we need
+							// a way to separate them back out.
+							controller.enqueue(`${newLine}:::`);
 						}
 					} catch (error) {
 						cleanUp();
 					}
 				});
 				file.on('error', (error: Error) => {
-					console.log('error', error);
+					console.log('File read error', error);
 				});
 			} catch (error) {
 				cleanUp();
@@ -75,6 +82,7 @@ export async function GET() {
 			}
 		});
 	} catch (error) {
+		console.log('GET /api/observation error', error);
 		return new Response('Something went wrong', {
 			status: 500
 		});

@@ -17,17 +17,27 @@
 							break;
 						}
 
-						const streamedObservation = JSON.parse(value) as Observation<unknown, unknown, unknown>;
+						// `value` may represent more than one observation
+						//  so we need to split on the delimiter
+						const preparedObservations = value
+							.split(':::')
+							.filter((item) => item) // get rid of empty strings
+							.map((observationAsString: string) => {
+								const parsedObservation = JSON.parse(observationAsString) as Observation<
+									unknown,
+									unknown,
+									unknown
+								>;
+								return {
+									...parsedObservation,
+									event:
+										typeof parsedObservation.event === 'string'
+											? parsedObservation.event
+											: JSON.stringify(parsedObservation.event, null, 2)
+								};
+							});
 
-						const newObservation: Observation<string, unknown, unknown> = {
-							...streamedObservation,
-							event:
-								typeof streamedObservation.event === 'string'
-									? streamedObservation.event
-									: JSON.stringify(streamedObservation.event, null, 2)
-						};
-
-						observations.unshift(newObservation);
+						observations = [...preparedObservations, ...observations];
 					}
 				}
 			} catch (error) {
